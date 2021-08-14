@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
+
+    public function client(){
+
+        return $this->belongsTo(Client::class);
+    }
+
+    public function message(){
+        return $this->belongsToMany(Message::class,SentMessage::class);
+    }
 }

@@ -14,16 +14,14 @@ class CreateSentMessagesTable extends Migration
     public function up()
     {
         Schema::create('customer_sent_messages', function (Blueprint $table) {
-            $table->id();
-            $table->primary(['client_id','message_id']);
-            $table->foreignId('client_id');
+            $table->primary(['customer_id','message_id']);
             $table->foreignId('message_id');
-            $table->string('customer_ids');
+            $table->foreignId('customer_id');
             $table->timestamps();
 
-            $table->foreign('client_id')
+            $table->foreign('customer_id')
                 ->references('id')
-                ->on('clients')
+                ->on('customers')
                 ->cascadeOnDelete();
 
             $table->foreign('message_id')
