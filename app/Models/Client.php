@@ -3,30 +3,42 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Model;
 
 class Client extends Model
 {
+    protected $guarded = ['id'];
+    protected $table = 'clients';
+    protected $fillable = ['first_name', 'last_name', 'phone', 'email', 'password'];
     use HasFactory;
 
-    public function customer(){
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
 
-     return  $this->hasMany(Customer::class);
+    public function getAuthPassword()
+    {
+        return $this->password;
     }
 
-    public function messages(){
-        return  $this->hasMany(Message::class);
+    public function customer()
+    {
+
+        return $this->hasMany(Customer::class);
     }
 
-    public function messageSent(){
-        return $this->hasManyThrough(Message::class,SentMessage::class,'message_id','id');
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 
-    public function setFullNameAttribute(){
-        return $this->first_name .' ' . $this->last_name;
+    public function messageSent()
+    {
+        return $this->hasManyThrough(Message::class, SentMessage::class, 'message_id', 'id');
     }
 
-    public function setFirstNameAttribute($value){
-        return ucfirst($value);
+    public function getfullNameAttribute()
+    {
+        return ucfirst($this->first_name) . ' ' . ucfirst($this->last_name);
     }
 }
